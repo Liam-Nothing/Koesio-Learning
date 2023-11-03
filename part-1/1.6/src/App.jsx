@@ -26,11 +26,26 @@ const Part = ({ datas }) => {
   )
 }
 
-const Average = ({ datas }) => {
+const Total = ({ datas }) => {
+  const total = datas.reduce((sum, data) => sum + data.value, 0);
   return (
-    <div>
-      {datas.map(button => <p>{button.label} : {button.value}</p>)}
-    </div>
+    <p>Total {total}</p>
+  )
+}
+
+const Average = ({ datas }) => {
+  const totalFeedback = datas.reduce((sum, data) => sum + data.value, 0);
+  const averageScore = (datas[0].value * 1 + datas[1].value * 0 + datas[2].value * -1) / totalFeedback;
+  return (
+    <p>Average Score: {averageScore}</p>
+  )
+}
+
+const Positive = ({ datas }) => {
+  const total = datas.reduce((sum, data) => sum + data.value, 0);
+  const percentage = (datas[0].value / total) * 100; 
+  return (
+    <p>Positive : {percentage} %</p>
   )
 }
 
@@ -63,6 +78,9 @@ const App = () => {
       <Button onSmash={() => setBad(bad + 1)} text={data[2].label} />
       <Header text="statistics" />
       <Part datas={data} />
+      <Total datas={data} />
+      <Average datas={data} />
+      <Positive datas={data} />
     </div>
   )
 }
