@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 const Display = ({ text }) => <div>{text}</div>
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
+const Header = ({ text }) => <h1>{text}</h1>
 
 const App = () => {
   const anecdotes = [
@@ -19,23 +20,32 @@ const App = () => {
   const random = () => Math.floor(Math.random() * anecdotes.length);
   const [selected, setSelected] = useState(random)
 
-  let initialPoints = [];
-  // const initialPoints = [0]*anecdotes.length;
+  const initialPoints = Array(anecdotes.length).fill(0);
   initialPoints[3] = 5;
+  // console.log(initialPoints);
   const [points, setPoints] = useState(initialPoints);
+  // console.log(points);
 
   return (
-    <div style={{textAlign: 'center', margin : 'auto'}}>
-      <Display text={anecdotes[selected]} />
-      <Button onClick={() => setSelected(random)} text="Random sentence" />
-      <Button onClick={() => {
-        var copy = { ...points };
-        copy[selected] = copy[selected] ? copy[selected] + 1 : 1;
-        setPoints(copy);
-        // console.log(points);
-      }} text="Vote" />
-      <Display text={`has ${points[selected] ? points[selected] : 0} vote(s)`} />
-    </div>
+    <>
+      <div>
+        <Header text="Anecdote of the day" />
+        <Display text={anecdotes[selected]} />
+        <Button onClick={() => setSelected(random)} text="Random sentence" />
+        <Button onClick={() => {
+          var copy = [...points];
+          copy[selected] = copy[selected] ? copy[selected] + 1 : 1;
+          setPoints(copy);
+          // console.log(points);
+        }} text="Vote" />
+        <Display text={`has ${points[selected] ? points[selected] : 0} vote(s)`} />
+      </div>
+      <div>
+        <Header text="Anecdote with most votes" />
+        <Display text={anecdotes[points.indexOf(Math.max(...points))]} />
+        <Display text={`has ${Math.max(...points)} vote(s)`} />
+      </div>
+    </>
   )
 }
 
