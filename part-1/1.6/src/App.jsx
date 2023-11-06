@@ -18,18 +18,18 @@ const Content = ({ datas }) => {
 }
 
 // Each individual Part within the Content
-const Part = ({ datas }) => {
+const Part = ({ datas }) => {  
   return (
-    <div>
-      {datas.map(button => <p>{button.label} : {button.value}</p>)}
+     <div>
+       {datas.map(button => <p>{button.label} : {button.value}</p>)}
     </div>
-  )
+   )
 }
 
 const Total = ({ datas }) => {
   const total = datas.reduce((sum, data) => sum + data.value, 0);
   return (
-    <p>Total {total}</p>
+    <p>Total : {total}</p>
   )
 }
 
@@ -46,6 +46,18 @@ const Positive = ({ datas }) => {
   const percentage = (datas[0].value / total) * 100; 
   return (
     <p>Positive : {percentage} %</p>
+  )
+}
+
+const Statistics = ({ datas }) => {
+  return (
+    <div>
+      <Header text="statistics" />
+      <Part datas={datas} />
+      <Total datas={datas} />
+      <Average datas={datas} />
+      <Positive datas={datas} />
+    </div>
   )
 }
 
@@ -76,11 +88,14 @@ const App = () => {
       <Button onSmash={() => setGood(good + 1)} text={data[0].label} />
       <Button onSmash={() => setNeutral(neutral + 1)} text={data[1].label} />
       <Button onSmash={() => setBad(bad + 1)} text={data[2].label} />
-      <Header text="statistics" />
+      <Header datas={data} />
+      <Statistics datas={data} />
+
+      {/* <Header text="statistics" />
       <Part datas={data} />
       <Total datas={data} />
       <Average datas={data} />
-      <Positive datas={data} />
+      <Positive datas={data} /> */}
     </div>
   )
 }
