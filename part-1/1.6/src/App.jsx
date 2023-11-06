@@ -70,6 +70,19 @@ const Statistics = ({ datas }) => {
   }
 }
 
+const Buttons_header = ({ datas, setGood, setNeutral, setBad }) => {
+
+  return (
+    <div>
+      <Header text="give feedback" />
+      <Button onSmash={() => setGood(datas[0].value + 1)} text={datas[0].label} />
+      <Button onSmash={() => setNeutral(datas[1].value + 1)} text={datas[1].label} />
+      <Button onSmash={() => setBad(datas[2].value + 1)} text={datas[2].label} />
+    </div>
+  )
+}
+
+
 const App = () => {
 
   const [good, setGood] = useState(0)
@@ -93,18 +106,8 @@ const App = () => {
 
   return (
     <div>
-      <Header text="give feedback" />
-      <Button onSmash={() => setGood(good + 1)} text={data[0].label} />
-      <Button onSmash={() => setNeutral(neutral + 1)} text={data[1].label} />
-      <Button onSmash={() => setBad(bad + 1)} text={data[2].label} />
-      <Header datas={data} />
+      <Buttons_header datas={data} setGood={setGood} setNeutral={setNeutral} setBad={setBad} />
       <Statistics datas={data} />
-
-      {/* <Header text="statistics" />
-      <Part datas={data} />
-      <Total datas={data} />
-      <Average datas={data} />
-      <Positive datas={data} /> */}
     </div>
   )
 }
