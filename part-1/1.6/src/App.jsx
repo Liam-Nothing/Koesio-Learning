@@ -50,15 +50,24 @@ const Positive = ({ datas }) => {
 }
 
 const Statistics = ({ datas }) => {
-  return (
-    <div>
-      <Header text="statistics" />
-      <Part datas={datas} />
-      <Total datas={datas} />
-      <Average datas={datas} />
-      <Positive datas={datas} />
-    </div>
-  )
+  if (datas[0].value === 0 && datas[1].value === 0 && datas[2].value === 0) {
+    return (
+      <div>
+        <Header text="statistics" />
+        <p>No feedback given</p>
+      </div>
+    )
+  }else{
+    return (
+      <div>
+        <Header text="statistics" />
+        <Part datas={datas} />
+        <Total datas={datas} />
+        <Average datas={datas} />
+        <Positive datas={datas} />
+      </div>
+    )
+  }
 }
 
 const App = () => {
