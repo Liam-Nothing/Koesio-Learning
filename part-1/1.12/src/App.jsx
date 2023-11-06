@@ -15,12 +15,26 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ]
    
-  const [selected, setSelected] = useState(0)
+  
+  const random = () => Math.floor(Math.random() * anecdotes.length);
+  const [selected, setSelected] = useState(random)
+
+  let initialPoints = [];
+  // const initialPoints = [0]*anecdotes.length;
+  initialPoints[3] = 5;
+  const [points, setPoints] = useState(initialPoints);
 
   return (
-    <div>
+    <div style={{textAlign: 'center', margin : 'auto'}}>
       <Display text={anecdotes[selected]} />
-      <Button onClick={() => setSelected(Math.floor(Math.random() * anecdotes.length))} text="Random sentence" />
+      <Button onClick={() => setSelected(random)} text="Random sentence" />
+      <Button onClick={() => {
+        var copy = { ...points };
+        copy[selected] = copy[selected] ? copy[selected] + 1 : 1;
+        setPoints(copy);
+        // console.log(points);
+      }} text="Vote" />
+      <Display text={`has ${points[selected] ? points[selected] : 0} vote(s)`} />
     </div>
   )
 }
