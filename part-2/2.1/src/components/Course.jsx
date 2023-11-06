@@ -10,6 +10,12 @@ const Part = ({ name, exercises }) => {
 
 const Total = ({ parts }) => {
     const total = parts.reduce((sum, part) => sum + part.exercises, 0);
+
+    // const total = parts.reduce((s, p) => {
+    //     console.log('what is happening', s, p)
+    //     // return someMagicHere 
+    //   })
+
     return (
       <p><b>Number of exercises {total}</b></p>
     )
@@ -17,7 +23,7 @@ const Total = ({ parts }) => {
 
 const Course = ({ course }) => {
 
-    console.log(course);
+    // console.log(course);
 
     const parts = course.parts;
 
