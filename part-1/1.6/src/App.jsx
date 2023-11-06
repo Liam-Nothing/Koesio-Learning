@@ -20,32 +20,47 @@ const Content = ({ datas }) => {
 // Each individual Part within the Content
 const Part = ({ datas }) => {  
   return (
-     <div>
-       {datas.map(button => <p>{button.label} : {button.value}</p>)}
-    </div>
-   )
+    <>
+      {datas.map(button => 
+        <tr>
+          <td>{button.label}</td>
+          <td>{button.value}</td>
+        </tr>
+      )}
+    </>
+  );
 }
+
 
 const Total = ({ datas }) => {
   const total = datas.reduce((sum, data) => sum + data.value, 0);
   return (
-    <p>Total : {total}</p>
+    <tr>
+      <td>Total</td>
+      <td>{total}</td>
+    </tr>
   )
 }
 
 const Average = ({ datas }) => {
   const totalFeedback = datas.reduce((sum, data) => sum + data.value, 0);
-  const averageScore = (datas[0].value * 1 + datas[1].value * 0 + datas[2].value * -1) / totalFeedback;
+  const averageScore = ((datas[0].value * 1 + datas[1].value * 0 + datas[2].value * -1) / totalFeedback).toFixed(2);
   return (
-    <p>Average Score: {averageScore}</p>
+    <tr>
+      <td>Average Score</td>
+      <td>{averageScore}</td>
+    </tr>
   )
 }
 
 const Positive = ({ datas }) => {
   const total = datas.reduce((sum, data) => sum + data.value, 0);
-  const percentage = (datas[0].value / total) * 100; 
+  const percentage = ((datas[0].value / total) * 100).toFixed(2); 
   return (
-    <p>Positive : {percentage} %</p>
+    <tr>
+      <td>Positive</td>
+      <td>{percentage} %</td>
+    </tr>
   )
 }
 
@@ -61,10 +76,12 @@ const Statistics = ({ datas }) => {
     return (
       <div>
         <Header text="statistics" />
-        <Part datas={datas} />
-        <Total datas={datas} />
-        <Average datas={datas} />
-        <Positive datas={datas} />
+        <table>
+          <Part datas={datas} />
+          <Total datas={datas} />
+          <Average datas={datas} />
+          <Positive datas={datas} />
+        </table>
       </div>
     )
   }
