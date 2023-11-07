@@ -2,16 +2,29 @@ import { useState } from 'react'
 
 const addElement = (element, list, callBack) => {
   if (element.name != '') {
-    callBack(list => [...list, element]);
+    if (personExists(element.name, list)) {
+      console.log('Name already exists');
+      alert('Name already exists');
+    }else{
+      callBack(list => [...list, element]);
+    }
   }else{
     console.log('Please enter a name');
   }
 };
+
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
+
 const debug = (element) => {
   console.log('debug: ', element);
 };
+
 const Display = ({ text }) => <div>{text}</div>
+
+const personExists = (name, persons) => {
+  return persons.some(person => person.name === name);
+};
+
 
 const App = () => {
 
