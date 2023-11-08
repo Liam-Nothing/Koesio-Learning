@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 // import Note from './components/Note'
-import noteService from './services/notes'
+// import noteService from './services/notes'
 import personsService from './services/phonebook'
 
 const addElement = (element, list, callBack) => {
@@ -34,7 +34,7 @@ const personExists = (name, number, persons) => {
 
 
 
-const addPerson = (element, list, callBack, callBackTwo) => {
+const addPerson = (element, list, callBack) => {
   if (element.name != '' && element.number != '') {
 
     if (personExists(element.name, element.number, list)) {
@@ -50,10 +50,10 @@ const addPerson = (element, list, callBack, callBackTwo) => {
           // setNewNote('')
 
           // console.log(initialContacts);
-          callBack(returnedContacts);
+          // callBack(returnedContacts);
   
           // Update the display
-          callBackTwo();
+          callBack();
         })
       }
   
@@ -151,7 +151,6 @@ const App = () => {
 
 
 
-
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 }
   ]);
@@ -178,12 +177,27 @@ const App = () => {
     personsService
       .getAll()
       .then(initialContacts => {
-        console.log(initialContacts);
+        // console.log(initialContacts);
         setPersons(initialContacts);
-  
         // Update the display
         setFilteredPersons(initialContacts);
       });
+  };
+
+  const DeleteContact = (id, name) => {
+    if (window.confirm("Delete " + name + "?")) {
+      personsService
+      .deleteContact(id)
+      .then(returnedNote => {
+        updateDisplay();
+      })
+      .catch(error => {
+        alert(
+          `the note '${note.content}' was already deleted from server`
+          )
+        setNotes(notes.filter(n => n.id !== id))
+      })
+    }
   };
   
   useEffect(() => {
@@ -205,7 +219,7 @@ const App = () => {
           Phone : <input onKeyUp={handlePhoneChange} />
         </div>
         <div>
-          <Button onClick={() => addPerson(newContact, persons, setPersons, updateDisplay)} text="Add" />
+          <Button onClick={() => addPerson(newContact, persons, updateDisplay)} text="Add" />
           <Button onClick={() => debug(newContact)} text="Debug - 1" />
           <Button onClick={() => debug(persons)} text="Debug - 2" />
         </div>
@@ -213,7 +227,7 @@ const App = () => {
       <h2>Numbers</h2>
       <div>
         <Display text={filteredPersons.map(person => (
-          <p key={person.id}>{person.name}, {person.number}</p>
+          <p key={person.id}>{person.name}, {person.number} <button onClick={() => DeleteContact(person.id, person.name)}>Delete</button></p>
         ))} />
       </div>
     </div>
