@@ -4,22 +4,6 @@ import axios from 'axios'
 // import noteService from './services/notes'
 import personsService from './services/phonebook'
 
-const addElement = (element, list, callBack) => {
-    if (element.name != '' && element.number != '') {
-
-        if (personExists(element.name, element.number, list)) {
-            console.log('Contact already exists');
-            alert('Contact already exists');
-        } else {
-            element = { ...element, id: list.length + 1 };
-            callBack(list => [...list, element]);
-        }
-
-    } else {
-        console.log('Please fill every fields');
-    }
-};
-
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
 const debug = (element) => {
@@ -32,14 +16,32 @@ const personExists = (name, number, persons) => {
     return persons.some(person => person.name === name) && persons.some(person => person.number === number);
 };
 
+const Notification = ({ message, status = "error"}) => {
+    if (message === null) {
+      return null
+    }
+  
+    return (
+      <div className={status}>
+        {message}
+      </div>
+    )
+}
 
-
-const addPerson = (element, list, callBack) => {
+const addPerson = (element, list, callBack, setErrorMessage, setSuccessMessage) => {
     if (element.name != '' && element.number != '') {
 
         if (personExists(element.name, element.number, list)) {
             console.log('Contact already exists');
             alert('Contact already exists');
+
+            setErrorMessage(
+                `Note '${note.content}' was already removed from server`
+              )
+              setTimeout(() => {
+                setErrorMessage(null)
+              }, 5000)
+            
         } else if (
             (list.some(person => person.name === element.name)) &&
             !(list.some(person => person.number === element.number))
@@ -61,101 +63,32 @@ const addPerson = (element, list, callBack) => {
                 .create(element)
                 .then(returnedContacts => {
                     callBack();
+
+                    setSuccessMessage(
+                        `New contact added`
+                    )
+                    setTimeout(() => {
+                        setSuccessMessage(null)
+                    }, 5000)
+
                 })
         }
 
     } else {
-        console.log('Please fill every fields');
+
+        setErrorMessage(
+            `Please fill every fields`
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
     }
 };
 
-
-
-
-
-
-
 const App = () => {
-    // const [notes, setNotes] = useState([])
-    // const [newNote, setNewNote] = useState('')
-    // const [showAll, setShowAll] = useState(false)
 
-    // useEffect(() => {
-    //   personsService
-    //     .getAll()
-    //     .then(initialContacts => {
-    //       setPersons(initialContacts)
-    //     })
-    // }, [])
-
-    // const toggleImportanceOf = id => {
-    //   const url = `http://localhost:3001/notes/${id}`
-    //   const note = notes.find(n => n.id === id)
-    //   const changedNote = { ...note, important: !note.important }
-
-    //   noteService
-    //     .update(id, changedNote)
-    //     .then(returnedNote => {
-    //       setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-    //     })
-    //     .catch(error => {
-    //       alert(
-    //         `the note '${note.content}' was already deleted from server`
-    //         )
-    //       setNotes(notes.filter(n => n.id !== id))
-    //     })
-    // }
-
-    // const addNote = (event) => {
-    //   event.preventDefault()
-    //   const noteObject = {
-    //     content: newNote,
-    //     important: Math.random() > 0.5,
-    //   }
-
-    //   noteService
-    //     .create(noteObject)
-    //     .then(returnedNote => {
-    //       setNotes(notes.concat(returnedNote))
-    //       setNewNote('')
-    //     })
-    // }
-
-    // const handleNoteChange = (event) => {
-    //   setNewNote(event.target.value)
-    // }
-
-    // const notesToShow = showAll
-    //   ? notes
-    //   : notes.filter(note => note.important)
-
-    // return (
-    //   <div>
-    //     <h1>Notes</h1>
-    //     <div>
-    //       <button onClick={() => setShowAll(!showAll)}>
-    //         show {showAll ? 'important' : 'all' }
-    //       </button>
-    //     </div>      
-    //     <ul>
-    //       {notesToShow.map(note => 
-    //         <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} />
-    //       )}
-    //     </ul>
-    //     <form onSubmit={addNote}>
-    //     <input
-    //         value={newNote}
-    //         onChange={handleNoteChange}
-    //       />
-    //       <button type="submit">save</button>
-    //     </form> 
-    //   </div>
-    // )
-
-
-
-
-
+    const [errorMessage, setErrorMessage] = useState(null)
+    const [successMessage, setSuccessMessage] = useState(null)
 
 
     const [persons, setPersons] = useState([
@@ -214,6 +147,8 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification message={errorMessage} />
+            <Notification message={successMessage} status='success'/>
             <div>
                 Filter by : <input onKeyUp={handleNameFilter} />
             </div>
@@ -226,7 +161,7 @@ const App = () => {
                     Phone : <input onKeyUp={handlePhoneChange} />
                 </div>
                 <div>
-                    <Button onClick={() => addPerson(newContact, persons, updateDisplay)} text="Add" />
+                    <Button onClick={() => addPerson(newContact, persons, updateDisplay, setErrorMessage, setSuccessMessage)} text="Add" />
                     <Button onClick={() => debug(newContact)} text="Debug - 1" />
                     <Button onClick={() => debug(persons)} text="Debug - 2" />
                 </div>
