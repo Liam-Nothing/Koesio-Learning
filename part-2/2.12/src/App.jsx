@@ -32,16 +32,12 @@ const addPerson = (element, list, callBack, setErrorMessage, setSuccessMessage) 
     if (element.name != '' && element.number != '') {
 
         if (personExists(element.name, element.number, list)) {
-            console.log('Contact already exists');
-            alert('Contact already exists');
-
             setErrorMessage(
-                `Note '${note.content}' was already removed from server`
+                `Contact already exists`
               )
               setTimeout(() => {
                 setErrorMessage(null)
               }, 5000)
-            
         } else if (
             (list.some(person => person.name === element.name)) &&
             !(list.some(person => person.number === element.number))
@@ -128,14 +124,18 @@ const App = () => {
         if (window.confirm("Delete " + name + "?")) {
             personsService
                 .deleteContact(id)
-                .then(returnedNote => {
+                .then(() => {
                     updateDisplay();
                 })
                 .catch(error => {
-                    alert(
-                        `the note '${note.content}' was already deleted from server`
-                    )
-                    setNotes(notes.filter(n => n.id !== id))
+                    setErrorMessage(
+                        `Contact already deleted`
+                      )
+                      setTimeout(() => {
+                        setErrorMessage(null)
+                      }, 5000)
+
+                    updateDisplay();
                 })
         }
     };
