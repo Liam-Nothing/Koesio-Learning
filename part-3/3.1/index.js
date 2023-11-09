@@ -27,9 +27,6 @@ let persons = [
     }
 ]
 
-app.get('/api/persons', (request, response) => {
-    response.send(persons)
-})
 
 const PORT = 3001
 app.listen(PORT, () => {
@@ -41,6 +38,10 @@ app.get('/info', (request, response) => {
         `<p>Phonebook has info for ${persons.length} people</p>
         <p>${new Date()}</p>`
     )
+})
+
+app.get('/api/persons', (request, response) => {
+    response.send(persons)
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -71,6 +72,12 @@ app.post('/api/persons', (request, response) => {
     if (!body.name || !body.number) {
         return response.status(400).json({
             error: 'content missing'
+        })
+    }
+
+    if (persons.find(person => person.name === body.name)) {
+        return response.status(400).json({
+            error: 'name must be unique'
         })
     }
 
