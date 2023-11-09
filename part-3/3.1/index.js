@@ -41,3 +41,16 @@ app.get('/info', (request, response) => {
         <p>${new Date()}</p>`
     )
 })
+
+app.get('/api/persons/:id', (request, response) => {
+
+    const id = Number(request.params.id)
+    const persons_target = persons.find(person => person.id === id)
+
+    if (persons_target) {
+        response.json(persons_target)
+    } else {
+        response.status(404).end()
+    }
+
+})
