@@ -1,26 +1,27 @@
 const express = require('express')
+const { v4: uuidv4 } = require('uuid');
 const app = express()
 
 app.use(express.json())
 
 let persons = [
     {
-        "id": 1,
+        "id": uuidv4(),
         "name": "Arto Hellas",
         "number": "040-123456"
     },
     {
-        "id": 2,
+        "id": uuidv4(),
         "name": "Ada Lovelace",
         "number": "39-44-5323523"
     },
     {
-        "id": 3,
+        "id": uuidv4(),
         "name": "Dan Abramov",
         "number": "12-43-234345"
     },
     {
-        "id": 4,
+        "id": uuidv4(),
         "name": "Mary Poppendieck",
         "number": "39-2323-6423122"
     }
@@ -62,4 +63,24 @@ app.delete('/api/persons/:id', (request, response) => {
 
 
     response.status(204).end()
+})
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+
+    if (!body.name || !body.number) {
+        return response.status(400).json({
+            error: 'content missing'
+        })
+    }
+
+    const person = {
+        name: body.name,
+        number: body.number || null,
+        id: uuidv4(),
+    }
+
+    persons = persons.concat(person)
+
+    response.json(person)
 })
