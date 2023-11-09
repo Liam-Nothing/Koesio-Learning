@@ -3,8 +3,19 @@ var morgan = require('morgan')
 const { v4: uuidv4 } = require('uuid');
 const app = express()
 
-app.use(morgan('tiny'))
 app.use(express.json())
+
+// morgan.token('body', (req) => JSON.stringify(req.body))
+// app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
+
+app.use((req, res, next) => {
+    if (req.method === 'POST') {
+        console.log('Request Body:', req.body);
+    }
+    next();
+});
+
+app.use(morgan('tiny'));
 
 let persons = [
     {
