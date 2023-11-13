@@ -7,13 +7,12 @@ app = "empty-fog-5886"
 primary_region = "cdg"
 
 [build]
-  image = "Dockerfile"
 
 [env]
-  PORT = "3000"
+  PORT = "3000" # add this
 
 [http_service]
-  internal_port = 3000
+  internal_port = 3000 # ensure that this is same as PORT
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true
