@@ -159,8 +159,8 @@ const App = () => {
                 </div>
                 <div>
                     <Button onClick={() => addPerson(newContact, persons, updateDisplay, setErrorMessage, setSuccessMessage)} text="Add" />
-                    <Button onClick={() => debug(newContact)} text="Debug - 1" />
-                    <Button onClick={() => debug(persons)} text="Debug - 2" />
+                    {/* <Button onClick={() => debug(newContact)} text="Debug - 1" />
+                    <Button onClick={() => debug(persons)} text="Debug - 2" /> */}
                 </div>
             </form>
             <h2>Numbers</h2>
