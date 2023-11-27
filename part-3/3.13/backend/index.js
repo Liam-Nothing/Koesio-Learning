@@ -200,25 +200,16 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
-    console.error(error.message)
+    console.error(error.message);
 
     if (error.name === 'CastError') {
-        return response.status(400).send({ error: 'malformatted id' })
+        response.status(400).send({ error: 'malformatted id' });
     } else if (error.name === 'ValidationError') {
-
-        // setErrorMessage(
-        //     error.message
-        // )
-        // setTimeout(() => {
-        //     setErrorMessage(null)
-        // }, 5000)
-
-
-        return response.status(400).json({ error: error.message })
-
+        response.status(400).json({ error: error.message });
+    } else {
+        response.status(500).json({ error: 'Internal server error' });
     }
-
-    next(error)
 }
+
 
 app.use(errorHandler)

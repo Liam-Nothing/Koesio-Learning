@@ -73,6 +73,18 @@ const addPerson = (element, list, callBack, setErrorMessage, setSuccessMessage) 
                     }, 5000)
 
                 })
+                .catch(error => {
+                    if (error.response && error.response.data) {
+                        // Display the error message from the backend
+                        setErrorMessage(error.response.data.error);
+                    } else {
+                        setErrorMessage("An unknown error occurred");
+                    }
+                    setTimeout(() => {
+                        setErrorMessage(null);
+                    }, 5000);
+                });
+
         }
 
     } else {
