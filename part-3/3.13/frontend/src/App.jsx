@@ -41,11 +41,19 @@ const addPerson = (element, list, callBack, setErrorMessage, setSuccessMessage) 
         ) {
             if (window.confirm("Update " + element.name + "?")) {
 
-                console.log(element);
-                const elm_id = list.findIndex(person => person.name === element.name) + 1;
+                // console.log(element);
+                // const select_id = list.findIndex(person => person.name === element.name) + 1;
+
+                // console.log(select_id);
+                // console.log(list);
+
+                // const elm_id = list[select_id].id;
+
+                const elm_index = list.findIndex(person => person.name === element.name);
+                const person_id = elm_index !== -1 ? list[elm_index].id : null;
 
                 personsService
-                    .update(elm_id, element)
+                    .update(person_id, element)
                     .then(() => {
                         callBack();
                     });

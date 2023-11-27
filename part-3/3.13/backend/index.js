@@ -148,6 +148,11 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
+    // if (body.content === undefined) {
+    //     return response.status(400).json({ error: 'content missing' })
+    // }
+
+
     const person = new Person({
         name: body.name,
         number: body.number || null,
@@ -162,14 +167,15 @@ app.post('/api/persons', (request, response) => {
 app.put('/api/persons/:id', (request, response, next) => {
     const body = request.body
 
-    const note = {
-        content: body.content,
-        important: body.important,
+    const person = {
+        name: body.name,
+        number: body.number || null,
     }
 
-    Person.findByIdAndUpdate(request.params.id, note, { new: true })
-        .then(updatedNote => {
-            response.json(updatedNote)
+    Person.findByIdAndUpdate(request.params.id, person, { new: true })
+        .then(updatedPerson => {
+            console.log(updatedPerson)
+            response.json(updatedPerson)
         })
         .catch(error => next(error))
 })
