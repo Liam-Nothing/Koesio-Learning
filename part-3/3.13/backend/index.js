@@ -36,7 +36,11 @@ mongoose.connect(url)
     })
 
 const personSchema = new mongoose.Schema({
-    name: String,
+    name: {
+        type: String,
+        minLength: 5,
+        required: true
+    },
     number: String,
 })
 
@@ -89,10 +93,11 @@ let persons = [
 ]
 
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
-})
+    console.log(`Server running on port ${PORT}`);
+});
+
 
 app.get('/info', (request, response) => {
     response.send(
@@ -139,7 +144,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 })
 
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const body = request.body
 
     if (!body.name || !body.number) {
@@ -158,9 +163,11 @@ app.post('/api/persons', (request, response) => {
         number: body.number || null,
     })
 
-    person.save().then(savedPerson => {
-        response.json(savedPerson)
-    })
+    person.save()
+        .then(savedPerson => {
+            response.json(savedPerson)
+        })
+        .catch(error => next(error))
 })
 
 
@@ -183,7 +190,12 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 
 const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
+    response.status(404).send(
+        {
+            error: 'unknown endpoint : ' + request.method + ' ' + request.path
+            // debug: request
+        }
+    )
 }
 
 app.use(unknownEndpoint)
@@ -193,6 +205,8 @@ const errorHandler = (error, request, response, next) => {
 
     if (error.name === 'CastError') {
         return response.status(400).send({ error: 'malformatted id' })
+    } else if (error.name === 'ValidationError') {
+        return response.status(400).json({ error: error.message })
     }
 
     next(error)
