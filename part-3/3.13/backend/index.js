@@ -8,10 +8,15 @@ const { v4: uuidv4 } = require('uuid');
 const app = express()
 
 
+
+
+
 app.use(express.static('dist'))
-app.use(express.json())
 app.use(cors())
-// app.use(requestLogger)
+app.use(express.json())
+
+
+
 
 const mongoose = require('mongoose')
 
@@ -48,12 +53,15 @@ const Person = mongoose.model('Person', personSchema)
 
 module.exports = mongoose.model('Person', personSchema)
 
-app.use((req, res, next) => {
-    if (req.method === 'POST') {
-        console.log('Request Body:', req.body);
-    }
+const requestLogger = (req, res, next) => {
+    console.log('Method:', req.method);
+    console.log('Path:  ', req.path);
+    console.log('Body:  ', req.body);
+    console.log('---');
     next();
-});
+};
+
+app.use(requestLogger)
 
 app.use(morgan('tiny'));
 
@@ -101,15 +109,18 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/api/persons/:id', (request, response, next) => {
     Person.findById(request.params.id)
-        .then(note => {
-            if (note) {
-                response.json(note)
+        .then(person => {
+            if (person) {
+                response.json(person)
             } else {
                 response.status(404).end()
             }
         })
         .catch(
-            error => next(error)
+            error => {
+                // console.log(request.params.id)
+                next(error)
+            }
         )
 })
 
