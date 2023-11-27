@@ -49,7 +49,7 @@ personSchema.set('toJSON', {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
         delete returnedObject.__v
-        // delete returnedObject.name
+        delete returnedObject.name
     }
 })
 
@@ -100,15 +100,17 @@ app.listen(PORT, () => {
 
 
 app.get('/info', (request, response) => {
-    response.send(
-        `<p>Phonebook has info for ${persons.length} people</p>
-        <p>${new Date()}</p>`
-    )
+    Person.find({}).then(persons => {
+        response.send(
+            `<p>Phonebook has info for ${persons.length} people(s)</p>
+            <p>${new Date()}</p>`
+        )
+    })
 })
 
 app.get('/api/persons', (request, response) => {
-    Person.find({}).then(notes => {
-        response.json(notes)
+    Person.find({}).then(persons => {
+        response.json(persons)
     })
 })
 
@@ -157,7 +159,6 @@ app.post('/api/persons', (request, response, next) => {
     //     return response.status(400).json({ error: 'content missing' })
     // }
 
-
     const person = new Person({
         name: body.name,
         number: body.number || null,
@@ -192,8 +193,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 const unknownEndpoint = (request, response) => {
     response.status(404).send(
         {
-            error: 'unknown endpoint : ' + request.method + ' ' + request.path
-            // debug: request
+            error: 'unknown endpoint'
         }
     )
 }
@@ -206,7 +206,17 @@ const errorHandler = (error, request, response, next) => {
     if (error.name === 'CastError') {
         return response.status(400).send({ error: 'malformatted id' })
     } else if (error.name === 'ValidationError') {
+
+        // setErrorMessage(
+        //     error.message
+        // )
+        // setTimeout(() => {
+        //     setErrorMessage(null)
+        // }, 5000)
+
+
         return response.status(400).json({ error: error.message })
+
     }
 
     next(error)
