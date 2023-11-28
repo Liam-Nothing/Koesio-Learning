@@ -1,14 +1,15 @@
 {
     "files.exclude": {
         // "**/public/": true,
-        // "**/node_modules/": true,
+        "**/node_modules/": true,
         // "**/vite.config.js": true,
         // "**/.eslintrc.cjs": true,
         // "**/.gitignore": true,
         // "**/README.md": true,
         // "**/index.html": true,
         // "**/package.json": true,
-        // "**/package-lock.json": true,
+        "**/package-lock.json": true,
+        "**/dist": true,
     },
     "editor.formatOnSave": true
 }
