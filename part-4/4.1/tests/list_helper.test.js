@@ -23,3 +23,49 @@ describe('total likes', () => {
         expect(result).toBe(5)
     })
 })
+
+describe('favorite blog', () => {
+    const listWithBlogs = [
+        {
+            _id: '5a422aa71b54a676234d17f1',
+            title: 'Go To Statement Considered Harmful 0',
+            author: 'Edsger W. Dijkstra',
+            likes: 7, // Random value
+            // __v: 0
+        },
+        {
+            _id: '5a422aa71b54a676234d17f2',
+            title: 'Go To Statement Considered Harmful 2',
+            author: 'Edsger W. Dijkstra',
+            likes: 12, // Random value
+            // __v: 0
+        },
+        {
+            _id: '5a422aa71b54a676234d17f3',
+            title: 'Go To Statement Considered Harmful 3',
+            author: 'Edsger W. Dijkstra',
+            likes: 5, // Random value
+            // __v: 0
+        },
+        {
+            _id: '5a422aa71b54a676234d17f4',
+            title: 'Go To Statement Considered Harmful 4',
+            author: 'Edsger W. Dijkstra',
+            likes: 3, // Random value
+            // __v: 0
+        },
+        {
+            _id: '5a422aa71b54a676234d17f5',
+            title: 'Go To Statement Considered Harmful 5',
+            author: 'Edsger W. Dijkstra',
+            likes: 12, // Random value
+            // __v: 0
+        }
+    ]
+
+    test('when list has multiple blogs, equals the blog with most likes', () => {
+        const result = listHelper.favoriteBlog(listWithBlogs)
+        expect(result).toEqual(listWithBlogs[4])
+        // console.log(result)
+    })
+})
