@@ -71,6 +71,52 @@ describe('favorite blog', () => {
     })
 })
 
+describe('author most posts', () => {
+    const listWithBlogs = [
+        {
+            _id: '5a422aa71b54a676234d17f1',
+            title: 'Go To Statement Considered Harmful 0',
+            author: 'Edsger W. Dijkstra',
+            likes: 7
+        },
+        {
+            _id: '5a422aa71b54a676234d17f2',
+            title: 'Go To Statement Considered Harmful 2',
+            author: 'Edsger W. Dijkstra',
+            likes: 12
+        },
+        {
+            _id: '5a422aa71b54a676234d17f3',
+            title: 'Go To Statement Considered Harmful 3',
+            author: 'Edsger W. Dijkstra',
+            likes: 5
+        },
+        {
+            _id: '5a422aa71b54a676234d17f4',
+            title: 'Go To Statement Considered Harmful 4',
+            author: 'Edsger W. Dijkstra - No',
+            likes: 3
+        },
+        {
+            _id: '5a422aa71b54a676234d17f5',
+            title: 'Go To Statement Considered Harmful 5',
+            author: 'Edsger W. Dijkstra - No Bis',
+            likes: 12
+        }
+    ]
+
+    test('when list has multiple blogs, equals the author with most blog', () => {
+        const result = listHelper.mostBlogs(listWithBlogs)
+        expect(result).toEqual(
+            {
+                author: 'Edsger W. Dijkstra',
+                blogs: 3
+            }
+        )
+    })
+})
+
+
 describe('best author', () => {
     const listWithBlogs = [
         {
@@ -105,12 +151,12 @@ describe('best author', () => {
         }
     ]
 
-    test('when list has multiple blogs, equals the author with most blogb', () => {
-        const result = listHelper.mostBlogs(listWithBlogs)
+    test('when list has multiple blogs, equals the author whose most likes on every posts', () => {
+        const result = listHelper.mostLikes(listWithBlogs)
         expect(result).toEqual(
             {
                 author: 'Edsger W. Dijkstra',
-                blogs: 3
+                likes: 24
             }
         )
     })

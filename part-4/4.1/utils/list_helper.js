@@ -30,20 +30,38 @@ const mostBlogs = (blogs) => {
     }
 }
 
+const mostLikes = (blogs) => {
+
+    const blogsByAuthor = _.groupBy(blogs, 'author')
+
+    // Sum the likes for each author
+    const likesByAuthor = _.mapValues(blogsByAuthor, (authorBlogs) => {
+        return _.sumBy(authorBlogs, 'likes')
+    })
+
+    // Convert the object to an array of [author, totalLikes] pairs
+    const authorLikesPairs = _.toPairs(likesByAuthor)
+
+    // Find the pair with the highest total likes
+    const [author, totalLikes] = _.maxBy(authorLikesPairs, pair => pair[1])
+
+    // Return the result in the desired format
+    return {
+        author,
+        likes: totalLikes
+    }
+}
+
 
 // const mostBlogs = (blogs) => {
-
 //     const temp_most_blog = {}
-
 //     for (const [, blog] of Object.entries(blogs)) {
-
 //         if (temp_most_blog[blog.author]) {
 //             temp_most_blog[blog.author]++
 //         } else {
 //             temp_most_blog[blog.author] = 1
 //         }
 //     }
-
 // }
 
 // const mostBlogsCORR = (blogs) => {
@@ -55,7 +73,6 @@ const mostBlogs = (blogs) => {
 //         }
 //         return authors
 //     }, {})
-
 //     return Object.keys(authors).reduce((max, author) => authors[max] > authors[author] ? max : author)
 // }
 
@@ -63,5 +80,6 @@ module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }
