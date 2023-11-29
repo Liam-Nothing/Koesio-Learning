@@ -50,14 +50,14 @@ describe('favorite blog', () => {
         {
             _id: '5a422aa71b54a676234d17f4',
             title: 'Go To Statement Considered Harmful 4',
-            author: 'Edsger W. Dijkstra',
+            author: 'Edsger W. Dijkstra - No',
             likes: 3, // Random value
             // __v: 0
         },
         {
             _id: '5a422aa71b54a676234d17f5',
             title: 'Go To Statement Considered Harmful 5',
-            author: 'Edsger W. Dijkstra',
+            author: 'Edsger W. Dijkstra - No',
             likes: 12, // Random value
             // __v: 0
         }
@@ -66,6 +66,52 @@ describe('favorite blog', () => {
     test('when list has multiple blogs, equals the blog with most likes', () => {
         const result = listHelper.favoriteBlog(listWithBlogs)
         expect(result).toEqual(listWithBlogs[4])
+        // expect(result).toEqual(listWithBlogs[1])
         // console.log(result)
+    })
+})
+
+describe('best author', () => {
+    const listWithBlogs = [
+        {
+            _id: '5a422aa71b54a676234d17f1',
+            title: 'Go To Statement Considered Harmful 0',
+            author: 'Edsger W. Dijkstra',
+            likes: 7
+        },
+        {
+            _id: '5a422aa71b54a676234d17f2',
+            title: 'Go To Statement Considered Harmful 2',
+            author: 'Edsger W. Dijkstra',
+            likes: 12
+        },
+        {
+            _id: '5a422aa71b54a676234d17f3',
+            title: 'Go To Statement Considered Harmful 3',
+            author: 'Edsger W. Dijkstra',
+            likes: 5
+        },
+        {
+            _id: '5a422aa71b54a676234d17f4',
+            title: 'Go To Statement Considered Harmful 4',
+            author: 'Edsger W. Dijkstra - No',
+            likes: 3
+        },
+        {
+            _id: '5a422aa71b54a676234d17f5',
+            title: 'Go To Statement Considered Harmful 5',
+            author: 'Edsger W. Dijkstra - No Bis',
+            likes: 12
+        }
+    ]
+
+    test('when list has multiple blogs, equals the author with most blogb', () => {
+        const result = listHelper.mostBlogs(listWithBlogs)
+        expect(result).toEqual(
+            {
+                author: 'Edsger W. Dijkstra',
+                blogs: 3
+            }
+        )
     })
 })
