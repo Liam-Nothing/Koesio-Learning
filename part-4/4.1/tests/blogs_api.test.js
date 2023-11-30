@@ -100,6 +100,27 @@ test('a invalid blog can t be create', async () => {
 
 })
 
+test('a blog can be deleted', async () => {
+    // Create a new blog
+    const newBlog = {
+        title: 'Test Blog',
+        author: 'John Doe',
+        url: 'https://example.com',
+        likes: 10
+    }
+
+    const response = await api.post('/api/blogs').send(newBlog)
+    const createdBlog = response.body
+
+    // Delete the created blog
+    await api.delete(`/api/blog/${createdBlog.id}`).expect(204)
+
+    // Verify that the blog is deleted
+    const blogsAtEnd = await helper.blogsInDb()
+    const blogIds = blogsAtEnd.map(blog => blog.id)
+    expect(blogIds).not.toContain(createdBlog.id)
+})
+
 afterAll(async () => {
     await mongoose.connection.close()
 })

@@ -31,4 +31,15 @@ blogsRouter.post('/api/blogs', (request, response) => {
         })
 })
 
+blogsRouter.delete('/api/blog/:id', (request, response) => {
+    Blog.findByIdAndRemove(request.params.id)
+        .then(result => {
+            response.status(204).end()
+        })
+        .catch(error => {
+            response.status(400).json('Bad request')
+        })
+})
+
+
 module.exports = blogsRouter
