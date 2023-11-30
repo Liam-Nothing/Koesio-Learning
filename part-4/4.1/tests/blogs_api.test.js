@@ -39,7 +39,7 @@ test('a valid blog can be added ', async () => {
         title: 'Go To Statement Considered Harmful',
         author: 'Edsger W. Dijkstra',
         url: '-',
-        likes: 5,
+        likes: 5
     }
 
 
@@ -66,6 +66,33 @@ test('a valid blog can be added ', async () => {
 
 })
 
+test('a valid blog without likes can be added ', async () => {
+    const newBlog = {
+        title: 'Go To Statement Considered Harmful',
+        author: 'Edsger W. Dijkstra',
+        url: '-'
+    }
+
+
+    console.log(newBlog)
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+
+    const contents = blogsAtEnd[blogsAtEnd.length - 1]
+    expect(contents).toEqual(expect.objectContaining({
+        likes: 0
+    }))
+
+})
 
 afterAll(async () => {
     await mongoose.connection.close()
