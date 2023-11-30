@@ -42,9 +42,6 @@ test('a valid blog can be added ', async () => {
         likes: 5
     }
 
-
-    console.log(newBlog)
-
     await api
         .post('/api/blogs')
         .send(newBlog)
@@ -73,9 +70,6 @@ test('a valid blog without likes can be added ', async () => {
         url: '-'
     }
 
-
-    console.log(newBlog)
-
     await api
         .post('/api/blogs')
         .send(newBlog)
@@ -91,6 +85,18 @@ test('a valid blog without likes can be added ', async () => {
     expect(contents).toEqual(expect.objectContaining({
         likes: 0
     }))
+
+})
+
+test('a invalid blog can t be create', async () => {
+    const newBlog = {
+        author: 'Edsger W. Dijkstra',
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
 
 })
 
