@@ -147,7 +147,7 @@ describe('best author', () => {
             _id: '5a422aa71b54a676234d17f5',
             title: 'Go To Statement Considered Harmful 5',
             author: 'Edsger W. Dijkstra - No Bis',
-            likes: 12
+            likes: 24
         }
     ]
 
