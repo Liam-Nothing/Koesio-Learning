@@ -113,13 +113,40 @@ test('a blog can be deleted', async () => {
     const createdBlog = response.body
 
     // Delete the created blog
-    await api.delete(`/api/blog/${createdBlog.id}`).expect(204)
+    await api.delete(`/api/blogs/${createdBlog.id}`).expect(204)
 
     // Verify that the blog is deleted
     const blogsAtEnd = await helper.blogsInDb()
     const blogIds = blogsAtEnd.map(blog => blog.id)
     expect(blogIds).not.toContain(createdBlog.id)
 })
+
+test('update the information of a blog post', async () => {
+    // Create a new blog
+    const newBlog = {
+        title: 'Test Blog',
+        author: 'John Doe',
+        url: 'https://example.com',
+        likes: 10
+    }
+
+    const response = await api.post('/api/blogs').send(newBlog)
+    const createdBlog = response.body
+
+    // Update the number of likes for the blog post
+    const updatedBlog = {
+        ...createdBlog,
+        likes: 20
+    }
+
+    await api.put(`/api/blogs/${createdBlog.id}`).send(updatedBlog).expect(200)
+
+    // Verify that the blog post is updated
+    const updatedResponse = await api.get(`/api/blogs/${createdBlog.id}`)
+    const updatedBlogPost = updatedResponse.body
+    expect(updatedBlogPost.likes).toBe(updatedBlog.likes)
+})
+
 
 afterAll(async () => {
     await mongoose.connection.close()

@@ -26,20 +26,53 @@ blogsRouter.post('/api/blogs', (request, response) => {
         .then(result => {
             response.status(201).json(result)
         })
-        .catch(error => {
+        .catch(() => {
             response.status(400).json('Bad request')
         })
 })
 
-blogsRouter.delete('/api/blog/:id', (request, response) => {
+blogsRouter.delete('/api/blogs/:id', (request, response) => {
     Blog.findByIdAndRemove(request.params.id)
-        .then(result => {
+        .then(() => {
             response.status(204).end()
         })
-        .catch(error => {
+        .catch(() => {
             response.status(400).json('Bad request')
         })
 })
 
+blogsRouter.put('/api/blogs/:id', async (request, response) => {
+    const body = request.body
 
-module.exports = blogsRouter
+    const updatedBlog = {
+        likes: body.likes
+    }
+
+    try {
+        const updated = await Blog.findByIdAndUpdate(request.params.id, updatedBlog, { new: true })
+        response.json(updated)
+    } catch (error) {
+        response.status(400).json('Bad request')
+    }
+})
+
+
+
+blogsRouter.get('/api/blogs/:id', (request, response) => {
+    const blogId = request.params.id;
+
+    Blog.findById(blogId)
+        .then(blog => {
+            if (blog) {
+                response.json(blog);
+            } else {
+                response.status(404).json({ error: 'Blog not found' });
+            }
+        })
+        .catch(() => {
+            response.status(400).json('Bad request');
+        });
+});
+
+module.exports = blogsRouter;
+
