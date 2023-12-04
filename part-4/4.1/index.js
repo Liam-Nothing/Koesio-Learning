@@ -14,16 +14,6 @@ app.listen(config.PORT, () => {
     console.log(`Server running on port ${config.PORT}`)
 })
 
-const requestLogger = (req, res, next) => {
-    console.log('Method:', req.method)
-    console.log('Path:  ', req.path)
-    console.log('Body:  ', req.body)
-    console.log('---')
-    next()
-}
-
-app.use(requestLogger)
-
 
 const errorHandler = (error, request, response, next) => {
 

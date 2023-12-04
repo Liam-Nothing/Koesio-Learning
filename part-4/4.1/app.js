@@ -1,22 +1,15 @@
 const express = require('express')
 const cors = require('cors')
+const requestLogger = require('./utils/requestLogger')
 const blogsRouter = require('./controllers/blogs')
-const app = express()
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
-
-const requestLogger = (req, res, next) => {
-    console.log('Method:', req.method)
-    console.log('Path:  ', req.path)
-    console.log('Body:  ', req.body)
-    console.log('---')
-    next()
-}
-
-app.use(requestLogger)
+const app = express()
 
 app.use(cors())
 app.use(express.json())
+
+app.use(requestLogger)
 
 app.use('/', blogsRouter)
 app.use('/api/users', usersRouter)
