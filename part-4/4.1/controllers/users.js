@@ -31,10 +31,15 @@ usersRouter.post('/', async (request, response) => {
 })
 
 usersRouter.get('/', async (request, response) => {
-
-    const users = await User.find({})
-
-    response.status(201).json(users)
+    try {
+        const users = await User.find({})
+            .populate('blogs', { title: 1, author: 1, url: 1, likes: 1 })
+        response.json(users)
+    } catch (error) {
+        console.error(error)
+        response.status(500).json({ error: 'internal server error' })
+    }
 })
+
 
 module.exports = usersRouter
