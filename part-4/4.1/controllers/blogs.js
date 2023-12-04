@@ -1,5 +1,15 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+
+const getTokenFrom = request => {
+    const authorization = request.get('authorization')
+    if (authorization && authorization.startsWith('Bearer ')) {
+        return authorization.replace('Bearer ', '')
+    }
+    return null
+}
 
 blogsRouter.get('/', (request, response) => {
     Blog.find({}).then(blogs => {
@@ -10,9 +20,15 @@ blogsRouter.get('/', (request, response) => {
 blogsRouter.post('/api/blogs', (request, response) => {
     const body = request.body
 
+    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+    if (!decodedToken.id) {
+        return response.status(401).json({ error: 'token invalid' })
+    }
+    // const user = User.findById(decodedToken.id)
+
     // Check if title and url are provided
     if (!body.title || !body.url) {
-        return response.status(400).json({ error: 'Title and URL are required' });
+        return response.status(400).json({ error: 'Title and URL are required' })
     }
 
     const blog = new Blog({
@@ -20,6 +36,7 @@ blogsRouter.post('/api/blogs', (request, response) => {
         author: body.author || null,
         url: body.url,
         likes: body.likes || 0
+        // user: user._id
     })
 
     blog.save()
@@ -59,20 +76,20 @@ blogsRouter.put('/api/blogs/:id', async (request, response) => {
 
 
 blogsRouter.get('/api/blogs/:id', (request, response) => {
-    const blogId = request.params.id;
+    const blogId = request.params.id
 
     Blog.findById(blogId)
         .then(blog => {
             if (blog) {
-                response.json(blog);
+                response.json(blog)
             } else {
-                response.status(404).json({ error: 'Blog not found' });
+                response.status(404).json({ error: 'Blog not found' })
             }
         })
         .catch(() => {
-            response.status(400).json('Bad request');
-        });
-});
+            response.status(400).json('Bad request')
+        })
+})
 
-module.exports = blogsRouter;
+module.exports = blogsRouter
 
