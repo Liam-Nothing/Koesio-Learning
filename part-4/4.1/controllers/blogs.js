@@ -1,7 +1,5 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
-const jwt = require('jsonwebtoken')
 
 blogsRouter.get('/', async (request, response) => {
     const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
@@ -11,24 +9,9 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
     const body = request.body
+    const user = request.user
 
     try {
-
-        if (!request.token) {
-            return response.status(401).json({ error: 'token missing' })
-        }
-
-        const decodedToken = jwt.verify(request.token, process.env.SECRET)
-
-        if (!decodedToken.id) {
-            return response.status(401).json({ error: 'token invalid' })
-        }
-
-        const user = await User.findById(decodedToken.id)
-
-        if (!user) {
-            return response.status(401).json({ error: 'user not found' })
-        }
 
         user.blogs = user.blogs || []
 
@@ -53,14 +36,14 @@ blogsRouter.post('/', async (request, response) => {
 
         response.status(201).json(savedBlog)
     } catch (error) {
-        console.error(error)
+        // console.error(error)
         response.status(400).json({ error: 'bad request' })
     }
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
 
-    console.log(request.user)
+    // console.log(request.user)
 
     const user = request.user
 
@@ -71,14 +54,14 @@ blogsRouter.delete('/:id', async (request, response) => {
     }
 
     if (blog.user.toString() === user.id.toString()) {
-        // Blog.findByIdAndRemove(request.params.id)
-        //     .then(() => {
-        //         response.status(204).end()
-        //     })
-        //     .catch(() => {
-        //         response.status(400).json('Bad request')
-        //     })
-        return response.status(401).json({ error: 'azerhjksfghb' })
+        Blog.findByIdAndRemove(request.params.id)
+            .then(() => {
+                response.status(204).end()
+            })
+            .catch(() => {
+                response.status(400).json('Bad request')
+            })
+        // return response.status(401).json({ error: 'azerhjksfghb' })
     } else {
         return response.status(401).json({ error: 'user not authorized' })
     }

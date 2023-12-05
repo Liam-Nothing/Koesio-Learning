@@ -10,7 +10,10 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.use(requestLogger)
+if (process.env.NODE_ENV !== 'test') {
+    app.use(requestLogger)
+}
+
 app.use(middleware.tokenExtractor)
 
 app.use('/api/blogs', middleware.userExtractor, blogsRouter)
