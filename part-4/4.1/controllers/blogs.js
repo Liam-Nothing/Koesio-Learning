@@ -60,21 +60,9 @@ blogsRouter.post('/', async (request, response) => {
 
 blogsRouter.delete('/:id', async (request, response) => {
 
-    if (!request.token) {
-        return response.status(401).json({ error: 'token missing' })
-    }
+    console.log(request.user)
 
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-
-    if (!decodedToken.id) {
-        return response.status(401).json({ error: 'token invalid' })
-    }
-
-    const user = await User.findById(decodedToken.id)
-
-    if (!user) {
-        return response.status(401).json({ error: 'user not found' })
-    }
+    const user = request.user
 
     const blog = await Blog.findById(request.params.id)
 
@@ -83,13 +71,14 @@ blogsRouter.delete('/:id', async (request, response) => {
     }
 
     if (blog.user.toString() === user.id.toString()) {
-        Blog.findByIdAndRemove(request.params.id)
-            .then(() => {
-                response.status(204).end()
-            })
-            .catch(() => {
-                response.status(400).json('Bad request')
-            })
+        // Blog.findByIdAndRemove(request.params.id)
+        //     .then(() => {
+        //         response.status(204).end()
+        //     })
+        //     .catch(() => {
+        //         response.status(400).json('Bad request')
+        //     })
+        return response.status(401).json({ error: 'azerhjksfghb' })
     } else {
         return response.status(401).json({ error: 'user not authorized' })
     }
