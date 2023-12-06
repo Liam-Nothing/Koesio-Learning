@@ -104,7 +104,7 @@ describe('when there is initially some blogs saved', () => {
 
         // console.log('token', token)
 
-        const rep = await api
+        await api
             .get('/api/blogs')
             .set('Authorization', `Bearer ${token}`)
             .expect(200)
@@ -212,7 +212,7 @@ describe('when there is initially some blogs saved', () => {
         // console.log(await helper.blogsInDb())
 
         // Delete the created blog
-        const resp = await api
+        await api
             .delete(`/api/blogs/${createdBlog.id}`)
             .set('Authorization', `Bearer ${token}`)
             .expect(204)
