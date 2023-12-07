@@ -62,10 +62,10 @@ const calculateExercises = (dailyExerciseHours: Array<number>, target: number): 
 //     calculateExercises(parseArguments(process.argv.slice(3)), process.argv[])
 // )
 
-try {
-    const target = parseTarget(process.argv[2]);
-    const dailyExerciseHours = parseArguments(process.argv.slice(3));
-    console.log(calculateExercises(dailyExerciseHours, target));
-} catch (e) {
-    console.error(e.message);
-}
+// try {
+//     const target = parseTarget(process.argv[2]);
+//     const dailyExerciseHours = parseArguments(process.argv.slice(3));
+//     console.log(calculateExercises(dailyExerciseHours, target));
+// } catch (e) {
+//     console.error(e.message);
+// }
