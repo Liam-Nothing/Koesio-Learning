@@ -1,14 +1,6 @@
-interface Result {
-    periodLength: number;
-    trainingDays: number;
-    success: boolean;
-    rating: number;
-    ratingDescription: string;
-    target: number;
-    average: number;
-}
+import { Result } from "./types";
 
-const parseArguments = (args: string[]): Array<number> => {
+export const parseArgumentsToNumber = (args: string[]): Array<number> => {
 
     if (args.length < 1) throw new Error('Not enough arguments');
 
@@ -21,7 +13,7 @@ const parseArguments = (args: string[]): Array<number> => {
     });
 };
 
-const parseTarget = (targetArg: string): number => {
+export const parseNumber = (targetArg: string): number => {
     const target = Number(targetArg);
     if (isNaN(target)) {
         throw new Error('Target must be a number');
@@ -29,7 +21,7 @@ const parseTarget = (targetArg: string): number => {
     return target;
 };
 
-const calculateExercises = (dailyExerciseHours: Array<number>, target: number): Result => {
+export const calculateExercises = (dailyExerciseHours: Array<number>, target: number): Result => {
     const periodLength = dailyExerciseHours.length;
     const trainingDays = dailyExerciseHours.filter(hours => hours > 0).length;
     const average = dailyExerciseHours.reduce((acc, cur) => acc + cur, 0) / periodLength;
@@ -53,19 +45,3 @@ const calculateExercises = (dailyExerciseHours: Array<number>, target: number): 
         average
     };
 };
-
-// console.log(
-//     calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2)
-// )
-
-// console.log(
-//     calculateExercises(parseArguments(process.argv.slice(3)), process.argv[])
-// )
-
-// try {
-//     const target = parseTarget(process.argv[2]);
-//     const dailyExerciseHours = parseArguments(process.argv.slice(3));
-//     console.log(calculateExercises(dailyExerciseHours, target));
-// } catch (e) {
-//     console.error(e.message);
-// }

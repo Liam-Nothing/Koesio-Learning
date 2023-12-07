@@ -1,6 +1,7 @@
 import express from 'express';
 import { isNotNumber, parseArgumentsBMI } from "./utils";
 import { calculateBmi } from "./bmiCalculator";
+import { calculateExercises, parseArgumentsToNumber, parseNumber } from "./exerciseCalculator";
 
 const app = express();
 app.use(express.json());
@@ -12,11 +13,42 @@ app.post('/calculate', (req, res) => {
 
     const { value1, value2, op } = req.body;
 
+    if (!value1 || !value2 || !op) {
+        return res.status(400).send({
+            error: 'parameters missing',
+            // debug_values: { value1, value2, op },
+            // req_body: req.body
+        });
+    }
+
     const result = calculator(
         Number(value1), Number(value2), op as Operation
     );
 
     return res.send({ result });
+});
+
+
+
+app.post('/exercises', (req, res) => {
+
+    const { daily_exercises, target } = req.body;
+
+    if (!daily_exercises || !target) {
+        return res.status(400).send({
+            error: 'parameters missing'
+        });
+    }
+
+    try {
+        const result = calculateExercises(parseArgumentsToNumber(daily_exercises), parseNumber(target));
+        return res.send({ result });
+    } catch (error) {
+        return res.status(400).send({
+            error: 'malformatted parameters'
+        });
+    }
+
 });
 
 
