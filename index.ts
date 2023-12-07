@@ -1,9 +1,34 @@
 import express from 'express';
-// import { json } from 'stream/consumers';
-// const express = require('express');
 import { isNotNumber, parseArgumentsBMI } from "./utils";
 import { calculateBmi } from "./bmiCalculator";
+
 const app = express();
+app.use(express.json());
+
+
+import { calculator, Operation } from './calculator';
+
+app.post('/calculate', (req, res) => {
+
+    const { value1, value2, op } = req.body;
+
+    const result = calculator(
+        Number(value1), Number(value2), op as Operation
+    );
+
+    return res.send({ result });
+});
+
+
+
+
+
+
+
+
+
+
+
 
 app.get('/ping', (_req, res) => {
     res.send('pong');
@@ -18,7 +43,7 @@ app.get('/test/:id?', (req, res) => {
         `Requested user with id : ` + req.params.id +
         `<br>isNotNumber : ` + isNotNumber(req.query.id)
     );
-})
+});
 
 app.get('/bmi', (req, res) => {
     try {
@@ -39,7 +64,7 @@ app.get('/bmi', (req, res) => {
     } catch (error) {
         res.status(400).send(error.message);
     }
-})
+});
 
 
 const PORT = 3003;

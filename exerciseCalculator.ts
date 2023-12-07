@@ -19,7 +19,7 @@ const parseArguments = (args: string[]): Array<number> => {
             return Number(arg);
         }
     });
-}
+};
 
 const parseTarget = (targetArg: string): number => {
     const target = Number(targetArg);
@@ -27,7 +27,7 @@ const parseTarget = (targetArg: string): number => {
         throw new Error('Target must be a number');
     }
     return target;
-}
+};
 
 const calculateExercises = (dailyExerciseHours: Array<number>, target: number): Result => {
     const periodLength = dailyExerciseHours.length;
