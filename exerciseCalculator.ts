@@ -19,7 +19,6 @@ const parseArguments = (args: string[]): Array<number> => {
             return Number(arg);
         }
     });
-
 }
 
 const parseTarget = (targetArg: string): number => {
